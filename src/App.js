@@ -8,7 +8,12 @@ function App() {
   const LOCAL_STORAGE_KEY = 'todo.app';
 
   useEffect(() => {
-    console.log(todo);
+    const storagedTodos = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (storagedTodos) setTodo(JSON.parse(storagedTodos));
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(todo));
   }, [todo])
 
   return (
