@@ -1,6 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
-const Form = ({ todo, setTodo }) => {
+const Form = ({ todo, setTodo, setCompletedTodo, setUncompletedTodo, setSelect }) => {
   const inputText = useRef();
   const [notificacao, setNotificacao] = useState(null);
 
@@ -20,16 +20,32 @@ const Form = ({ todo, setTodo }) => {
     }
     inputText.current.value = null
   }
+
+  function checkSelect(e) {
+    const valor = e.currentTarget.value;
+    setSelect(valor);
+    switch (valor) {
+      case 'completed':
+        let newTodos = [...todo]
+        setCompletedTodo(newTodos.filter((todo) => todo.completed))
+        break;
+      case 'uncompleted':
+        const newTodos2 = [...todo]
+        setUncompletedTodo(newTodos2.filter((todo) => !todo.completed))
+      default:
+        break;
+    }
+  }
   return (
     <form>
       <input ref={inputText} type="text" className="todo-input" />
       {notificacao ? notificacao : null}
       <button onClick={handleAddTodo} type="submit" className="todo-button"><i className="fas fa-plus-square"></i></button>
       <div className="select">
-        <select name="todos" className="filter-todo">
-          <option value="">All</option>
-          <option value="">completed</option>
-          <option value="">uncompleted</option>
+        <select onChange={checkSelect} name="todos" className="filter-todo">
+          <option value="all">All</option>
+          <option value="completed">completed</option>
+          <option value="uncompleted">uncompleted</option>
         </select>
       </div>
     </form >

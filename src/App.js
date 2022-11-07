@@ -2,24 +2,38 @@ import './App.css';
 import React, { useEffect, useState } from 'react';
 import Header from './components/Header';
 import Form from './components/Form';
+import TodoList from './components/TodoList';
 
 function App() {
   const [todo, setTodo] = useState([]);
-  const LOCAL_STORAGE_KEY = 'todo.app';
+  const [completedTodo, setCompletedTodo] = useState(null);
+  const [uncompletedTodo, setUncompletedTodo] = useState(null);
+  const [select, setSelect] = useState('all')
 
   useEffect(() => {
-    const storagedTodos = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (storagedTodos) setTodo(JSON.parse(storagedTodos));
-  }, [])
+    // console.log(completedTodo);
+    // console.log(uncompletedTodo);
+    // console.log(select);
+  }, [completedTodo, uncompletedTodo, select])
+
+  function handleCheck(id) {
+    const newTodos = [...todo];
+    const todo2 = newTodos.find((todo) => todo.id === id);
+    console.log(todo2);
+    todo2.completed = !todo2.completed;
+    return setTodo(newTodos);
+  }
+
 
   useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(todo));
+    // console.log(todo);
   }, [todo])
 
   return (
     <div className="App">
       <Header />
-      <Form todo={todo} setTodo={setTodo} />
+      <Form todo={todo} setTodo={setTodo} setCompletedTodo={setCompletedTodo} setUncompletedTodo={setUncompletedTodo} setSelect={setSelect} />
+      <TodoList todo={todo} handleCheck={handleCheck} completedTodo={completedTodo} uncompletedTodo={uncompletedTodo} select={select} setUncompletedTodo={setUncompletedTodo} setCompletedTodo={setCompletedTodo} setTodo={setTodo} />
     </div>
   );
 }
